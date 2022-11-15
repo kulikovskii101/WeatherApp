@@ -23,7 +23,7 @@ class WeatherAdapter : ListAdapter<DayWeather, WeatherAdapter.Holder>(Comparator
         fun bind(item: DayWeather) = with(binding) {
             tVDate.text = item.dateTime
             tVCondition.text = item.condition
-            tVTemp.text = item.currentTemperature.ifEmpty { "${item.maxTemperature}/${item.minTemperature}"} + "°C"
+            tVTemp.text = item.currentTemperature.ifEmpty { "${item.maxTemperature}/${item.minTemperature}"} + "°С"
             Picasso.get().load("https:"+item.imgUrl).into(imWeather)
         }
     }
