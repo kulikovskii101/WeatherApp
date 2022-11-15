@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
+
 import com.example.weatherapp.MainViewModel
-import com.example.weatherapp.R
+
 import com.example.weatherapp.adapters.WeatherAdapter
 import com.example.weatherapp.dataClasses.DayWeather
 import com.example.weatherapp.databinding.FragmentHoursBinding
-import com.example.weatherapp.databinding.FragmentMainBinding
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat

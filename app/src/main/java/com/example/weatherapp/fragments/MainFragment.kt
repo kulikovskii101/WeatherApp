@@ -2,7 +2,6 @@ package com.example.weatherapp.fragments
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
@@ -18,15 +17,15 @@ import androidx.fragment.app.*
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.weatherapp.DaysActivity
 import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.adapters.VpAdapter
 import com.example.weatherapp.dataClasses.DayWeather
-import com.example.weatherapp.databinding.FragmentMainBinding
+import com.example.weatherapp.databinding.FragmentMain1Binding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 
@@ -34,7 +33,7 @@ import java.text.SimpleDateFormat
 class MainFragment : Fragment() {
 
     private lateinit var pLauncher: ActivityResultLauncher<String>
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMain1Binding
     private lateinit var fLocationClient: FusedLocationProviderClient
     private val model: MainViewModel by activityViewModels()
 
@@ -56,7 +55,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentMain1Binding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -64,8 +63,8 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
         init()
-        updateCurrentCard()
-        getCityByLocated()
+//        updateCurrentCard()
+//        getCityByLocated()
     }
 
 
@@ -73,21 +72,19 @@ class MainFragment : Fragment() {
         fLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val adapter = VpAdapter(activity as FragmentActivity, fList)
         vP.adapter = adapter
-        bt7days.setOnClickListener {
-            val intent = Intent(, DaysActivity::class.java)
-            startActivity(intent)
-        }
-//        TabLayoutMediator(tabLayoutHoursAndDays, vP) { tab, position ->
-//            tab.text = tList[position]
-//        }.attach()
+        TabLayoutMediator(tabLayoutHoursAndDays, vP) { tab, position ->
+            tab.text = tList[position]
+        }.attach()
         iBGeoCity.setOnClickListener {
             getCityByLocated()
+            updateCurrentCard()
         }
         ibSearchCity.setOnClickListener {
 
             DialogManger.getCityByName(requireContext(), object : DialogManger.Listener {
                 override fun onClick(name: String) {
                     requestWeatherData(name)
+                    updateCurrentCard()
                 }
             })
         }
@@ -210,9 +207,6 @@ class MainFragment : Fragment() {
         Log.d("Error", item.cityName)
     }
 
-    private val simpleDateFormat = SimpleDateFormat("dd:mm:yyyy, HH:mm")
-
-    private fun getDateString(time: String): String = simpleDateFormat.format(time.toLong() * 1000L)
 
     companion object {
         @JvmStatic
